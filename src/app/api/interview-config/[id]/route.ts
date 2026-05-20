@@ -35,7 +35,6 @@ export async function GET(
     duration:      interview.duration,
     userName:      profile?.name ?? user.email?.split('@')[0] ?? 'there',
     resumeContext: profile?.resume_text ?? undefined,
-    interviewId:   interview.id,
     deployedUrl,
     webhookSecret: process.env.VAPI_WEBHOOK_SECRET!,
   })

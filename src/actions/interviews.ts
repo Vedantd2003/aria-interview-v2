@@ -47,7 +47,6 @@ export async function createInterview(input: unknown) {
     duration:      parsed.data.duration,
     userName:      profile?.name ?? user.email?.split('@')[0] ?? 'there',
     resumeContext: profile?.resume_text ?? undefined,
-    interviewId:   interview.id,
     deployedUrl,
     webhookSecret: process.env.VAPI_WEBHOOK_SECRET!,
   })

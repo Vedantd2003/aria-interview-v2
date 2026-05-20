@@ -7,38 +7,26 @@ export interface VapiTranscriptMessage {
   timestamp?: number
 }
 
-export interface VapiAssistantConfig {
-  model: {
-    provider: string
-    model: string
-    temperature: number
-    maxTokens: number
-    messages: { role: string; content: string }[]
+export interface VapiStartPayload {
+  assistantId: string
+  assistantOverrides: {
+    model: {
+      provider: 'openai'
+      model: string
+      temperature: number
+      maxTokens: number
+      messages: { role: 'system' | 'user' | 'assistant'; content: string }[]
+    }
+    firstMessage: string
+    maxDurationSeconds: number
+    silenceTimeoutSeconds: number
+    serverUrl: string
+    serverUrlSecret: string
   }
-  voice: {
-    provider: string
-    voiceId: string
-    model: string
-    stability: number
-    similarityBoost: number
-    optimizeStreamingLatency: number
-  }
-  transcriber: {
-    provider: string
-    model: string
-    language: string
-    smartFormat: boolean
-    endpointing: number
-  }
-  firstMessage: string
-  firstMessageMode: string
-  maxDurationSeconds: number
-  silenceTimeoutSeconds: number
-  backgroundSound: string
-  backchannelingEnabled: boolean
-  serverUrl: string
-  serverUrlSecret: string
 }
+
+// Legacy alias kept for import compatibility
+export type VapiAssistantConfig = VapiStartPayload
 
 export interface FeedbackScores {
   technical: number

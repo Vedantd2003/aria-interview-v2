@@ -47,8 +47,10 @@ export default function InterviewRoomPage() {
         store.setCallStatus('active')
         const callId = (vapi as unknown as { callId?: string }).callId ?? ''
         await startInterview(id, callId)
+        let secs = 0
         timerRef.current = setInterval(() => {
-          store.setElapsedSeconds(store.elapsedSeconds + 1)
+          secs += 1
+          store.setElapsedSeconds(secs)
         }, 1000)
       })
 
@@ -79,7 +81,8 @@ export default function InterviewRoomPage() {
         store.setCallStatus('idle')
       })
 
-      await vapi.start(config)
+      // Use assistantId + overrides (avoids 403 from inline assistant creation)
+      await vapi.start(config.assistantId, config.assistantOverrides)
       setConfigReady(true)
     }
 
