@@ -39,7 +39,11 @@ function LoginForm() {
     })
     setLoading(false)
     if (error) {
-      toast.error('Invalid credentials')
+      if (error.status === 429) {
+        toast.error('Too many attempts. Please wait a minute and try again.')
+      } else {
+        toast.error('Invalid credentials')
+      }
       return
     }
     router.push(redirectTo)

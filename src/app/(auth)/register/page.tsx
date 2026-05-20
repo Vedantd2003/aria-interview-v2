@@ -40,18 +40,30 @@ export default function RegisterPage() {
   async function onSubmit(data: FormData) {
     setLoading(true)
     const supabase = createClient()
-    const { error } = await supabase.auth.signUp({
+    const { data: result, error } = await supabase.auth.signUp({
       email: data.email,
       password: data.password,
       options: { data: { full_name: data.name } },
     })
     setLoading(false)
     if (error) {
-      toast.error('Something went wrong. Please try again.')
+      if (error.status === 429) {
+        toast.error('Too many sign-up attempts. Please wait a minute and try again.')
+      } else if (error.message?.includes('already registered')) {
+        toast.error('An account with this email already exists. Try signing in.')
+      } else {
+        toast.error(error.message ?? 'Something went wrong. Please try again.')
+      }
       return
     }
-    toast.success('Account created! Check your email to confirm.')
-    router.push('/login')
+    // Auto-confirm is enabled — user is already signed in
+    if (result.session) {
+      router.push('/dashboard')
+      router.refresh()
+    } else {
+      toast.success('Account created! You can now sign in.')
+      router.push('/login')
+    }
   }
 
   return (
